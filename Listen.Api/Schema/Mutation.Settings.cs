@@ -11,12 +11,14 @@ namespace Listen.Api.Schema
         [Description("Save app settings")]
         public DefaultResult<Settings> SaveSettings(
             UserContext context,
-            string path)
+            string path,
+            int? autoMatchThreshold)
         {
             var oldSettings = context.Search<Settings>("Path", "", UserContext.ReadType.Shallow)?.FirstOrDefault();
 
             var newSettings = new Settings(
-                path ?? oldSettings?.Path);
+                path ?? oldSettings?.Path,
+                autoMatchThreshold ?? oldSettings?.AutoMatchThreshold);
 
             if (newSettings.Equals(oldSettings))
             {
