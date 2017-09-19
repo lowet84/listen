@@ -13,7 +13,7 @@ namespace Listen.Api.Schema
         [Description("Get all books")]
         public Task<Book[]> AllBooks(UserContext context)
         {
-            var books = context.Search<Book>("id", "");
+            var books = context.Search<Book>("id", "", UserContext.ReadType.WithDocument);
             return Task.FromResult(books);
         }
 

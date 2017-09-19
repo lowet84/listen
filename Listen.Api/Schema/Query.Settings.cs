@@ -11,7 +11,7 @@ namespace Listen.Api.Schema
         [Description("The app settings")]
         public Task<Settings> Settings(UserContext context)
         {
-            var settings = context.Search<Settings>("id", "").FirstOrDefault();
+            var settings = context.Search<Settings>("id", "", UserContext.ReadType.WithDocument).FirstOrDefault();
             return Task.FromResult(settings);
         }
     }

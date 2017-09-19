@@ -25,7 +25,7 @@ namespace Listen.Api.Utils
             return ret;
         }
 
-        private static BookResult[] SearchBigBookSearch(string searchString)
+        public static BookResult[] SearchBigBookSearch(string searchString)
         {
             using (var client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) })
             {
@@ -37,9 +37,9 @@ namespace Listen.Api.Utils
                 var doc = new HtmlDocument();
                 doc.LoadHtml(html);
                 var images = doc.DocumentNode.Descendants("img")
-                    .Select(d => d.Attributes.FirstOrDefault(e => e.Name == "src").Value).ToList();
+                    .Select(d => d.Attributes.FirstOrDefault(e => e.Name == "src")?.Value).ToList();
                 var links = doc.DocumentNode.Descendants("a")
-                    .Select(d => d.Attributes.FirstOrDefault(e => e.Name == "href").Value).ToList();
+                    .Select(d => d.Attributes.FirstOrDefault(e => e.Name == "href")?.Value).ToList();
 
                 if (images.Count != links.Count) return null;
                 var result = Enumerable.Range(0, images.Count)
@@ -69,7 +69,7 @@ namespace Listen.Api.Utils
             }
         }
 
-        private class BookResult
+        public class BookResult
         {
             public string Link { get; set; }
             public string Img { get; set; }

@@ -17,13 +17,13 @@ namespace Listen.Api.Model
     {
         public string EncodedUrl { get; }
 
+        public string Url { get; }
+
         public RemoteImage(string url)
         {
             EncodedUrl = Convert.ToBase64String(Encoding.UTF8.GetBytes(url));
+            Url = url;
         }
-
-        [JsonIgnore]
-        public string Url => Encoding.UTF8.GetString(Convert.FromBase64String(EncodedUrl));
 
         [JsonIgnore]
         public string ContentType
@@ -45,6 +45,16 @@ namespace Listen.Api.Model
                     return client.GetByteArrayAsync(Url).Result;
                 }
             }
+        }
+    }
+
+    public class RemoteImageCollection
+    {
+        public RemoteImage[] Images { get; }
+
+        public RemoteImageCollection(RemoteImage[] images)
+        {
+            Images = images;
         }
     }
 }

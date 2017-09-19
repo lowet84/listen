@@ -13,7 +13,19 @@ namespace Listen.Api.Handlers
     {
         public override IDefaultImage GetImage(string key)
         {
-            return new UserContext().Get<CoverImage>(new Id(key), UserContext.ReadType.Shallow);
+            var id = new Id(key);
+
+            if (id.IsIdentifierForType<CoverImage>())
+            {
+                return new UserContext().Get<CoverImage>(id, UserContext.ReadType.Shallow);
+
+            }
+            if (id.IsIdentifierForType<RemoteImage>())
+            {
+                return new UserContext().Get<RemoteImage>(id, UserContext.ReadType.Shallow);
+            }
+
+            throw new Exception("Id must be of type CoverImage or RemoteImage");
         }
     }
 }

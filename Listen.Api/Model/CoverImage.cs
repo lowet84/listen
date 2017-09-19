@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using GraphQlRethinkDbLibrary.Handlers;
 using GraphQlRethinkDbLibrary.Schema.Types;
 using Microsoft.AspNetCore.StaticFiles;
@@ -8,13 +9,17 @@ namespace Listen.Api.Model
 {
     public class CoverImage : NodeBase<CoverImage>, IDefaultImage
     {
-        public string Url { get; }
         public string Data { get; }
+
+        public string EncodedUrl { get; }
+
+        public string Url { get; }
 
         public CoverImage(string url, string data)
         {
-            Url = url;
             Data = data;
+            Url = url;
+            EncodedUrl = Convert.ToBase64String(Encoding.UTF8.GetBytes(url));
         }
 
         [JsonIgnore]
