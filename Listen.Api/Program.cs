@@ -15,6 +15,7 @@ namespace Listen.Api
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
+                .UseUrls("http://*:7000")
                 .Build();
 
             host.Run();

@@ -11,16 +11,16 @@ namespace Listen.Api.Schema
     public partial class Query
     {
         [Description("Get all books")]
-        public Task<Book[]> AllBooks(UserContext context)
+        public Book[] AllBooks(UserContext context)
         {
             var books = context.Search<Book>("id", "", UserContext.ReadType.WithDocument);
-            return Task.FromResult(books);
+            return books;
         }
 
         [Description("Get book by id")]
-        public Task<Book> Book(UserContext context, Id id)
+        public Book Book(UserContext context, Id id)
         {
-            return Task.FromResult(context.Get<Book>(id));
+            return context.Get<Book>(id);
         }
     }
 }

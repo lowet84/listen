@@ -9,10 +9,10 @@ namespace Listen.Api.Schema
     public partial class Query
     {
         [Description("The app settings")]
-        public Task<Settings> Settings(UserContext context)
+        public Settings Settings(UserContext context)
         {
             var settings = context.Search<Settings>("id", "", UserContext.ReadType.WithDocument).FirstOrDefault();
-            return Task.FromResult(settings);
+            return settings;
         }
     }
 }

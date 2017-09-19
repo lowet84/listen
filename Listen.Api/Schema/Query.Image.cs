@@ -9,9 +9,9 @@ namespace Listen.Api.Schema
 {
     public partial class Query
     {
-        public Task<CoverImage[]> AllImages(UserContext context)
+        public CoverImage[] AllImages(UserContext context)
         {
-            return Task.FromResult(context.GetAll<CoverImage>(UserContext.ReadType.WithDocument));
+            return context.GetAll<CoverImage>(UserContext.ReadType.WithDocument);
         }
     }
 }
