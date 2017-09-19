@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using GraphQlRethinkDbLibrary;
 using GraphQlRethinkDbLibrary.Schema.Output;
 using GraphQL.Conventions;
@@ -38,7 +40,8 @@ namespace Listen.Api.Schema
         {
             var context = new UserContext();
 
-            var existingBook = context.Search<Book>("Path", folder, UserContext.ReadType.Shallow).FirstOrDefault();
+            var encodedFolder = Convert.ToBase64String(Encoding.UTF8.GetBytes(folder));
+            var existingBook = context.Search<Book>("EncodedPath", encodedFolder, UserContext.ReadType.Shallow).FirstOrDefault();
             if (existingBook != null) return (existingBook, false);
 
             var folderSearchString = Path.GetFileName(folder);
@@ -58,7 +61,7 @@ namespace Listen.Api.Schema
             var tagSearchString2 = $"{author} {album}";
 
             var results = BigBookSearch.Search(folderSearchString, tagSearchString1, tagSearchString2);
-            var bestResult = results.OrderByDescending(d => d.Number).FirstOrDefault();
+            var bestResult = results.OrderByDescending(d => d.Number).FirstOrDefault(d => d.Author != null && d.Title != null);
             Book book;
             if (bestResult == null || bestResult.Number < SettingsUtil.Settings.AutoMatchThreshold)
             {
@@ -67,7 +70,7 @@ namespace Listen.Api.Schema
             else
             {
                 var existingImage =
-                    context.Search<CoverImage>("Url", bestResult?.ImageLink, UserContext.ReadType.Shallow);
+                    context.Search<CoverImage>("Url", bestResult.ImageLink, UserContext.ReadType.Shallow);
                 CoverImage image;
                 if (existingImage.Length > 0)
                 {
@@ -75,11 +78,11 @@ namespace Listen.Api.Schema
                 }
                 else
                 {
-                    image = new CoverImage(bestResult?.ImageLink, MiscUtils.DownloadImage(bestResult?.ImageLink));
+                    image = new CoverImage(bestResult.ImageLink, MiscUtils.DownloadImage(bestResult.ImageLink));
                     context.AddDefault(image);
                 }
 
-                book = new Book(bestResult?.Title, bestResult?.Author, folder, image, false);
+                book = new Book(bestResult.Title, bestResult.Author, folder, image, false);
             }
 
             return (book, true);
@@ -87,12 +90,12 @@ namespace Listen.Api.Schema
 
         public DefaultResult<LookupBooksOutput> LookupBooks(UserContext context)
         {
-            var audioFiles = context.Search<AudioFile>("FilePath", "", UserContext.ReadType.Shallow);
+            var audioFiles = context.Search<AudioFile>("id", "", UserContext.ReadType.Shallow);
             if (audioFiles == null) return null;
             var folders = audioFiles.Select(d => d.Folder).Distinct().ToList();
             var books = folders.Select(LookupBook).ToList();
-
-            return null;
+            books.Where(d => d.Item2).ToList().ForEach(d => context.AddDefault(d.Item1));
+            return new DefaultResult<LookupBooksOutput>(new LookupBooksOutput(books.Count(d => d.Item2)));
         }
 
 

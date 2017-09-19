@@ -1,5 +1,6 @@
 ﻿using GraphQlRethinkDbLibrary.Database;
 using GraphQlRethinkDbLibrary.Handlers;
+using Listen.Api.Handlers;
 using Listen.Api.Schema;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,7 +25,8 @@ namespace Listen.Api
                 env,
                 new DatabaseName(Program.DatabaseName),
                 new DatabaseUrl("localhost"),
-                new GraphQlDefaultHandler<Query, Mutation>());
+                new GraphQlDefaultHandler<Query, Mutation>(),
+                new ImageHandler());
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Text;
 using GraphQlRethinkDbLibrary.Schema.Types;
 using Microsoft.AspNetCore.StaticFiles;
 using Newtonsoft.Json;
@@ -7,13 +9,15 @@ namespace Listen.Api.Model
 {
     public class AudioFile : NodeBase<AudioFile>
     {
-        public string FilePath { get; }
+        public string EncodedPath { get; }
 
         public AudioFile(string filePath)
         {
-            FilePath = filePath;
+            EncodedPath = Convert.ToBase64String(Encoding.UTF8.GetBytes(filePath));
         }
 
+        [JsonIgnore]
+        public string FilePath => Encoding.UTF8.GetString(Convert.FromBase64String(EncodedPath));
 
         [JsonIgnore]
         public string Folder => Path.GetDirectoryName(FilePath);
