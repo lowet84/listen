@@ -4,6 +4,7 @@ using System.Text;
 using GraphQlRethinkDbLibrary.Schema.Types;
 using Microsoft.AspNetCore.StaticFiles;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Listen.Api.Model
 {
@@ -17,7 +18,7 @@ namespace Listen.Api.Model
         }
 
         [JsonIgnore]
-        public string FilePath => Encoding.UTF8.GetString(Convert.FromBase64String(EncodedPath));
+        public string FilePath => EncodedPath != null ? Encoding.UTF8.GetString(Convert.FromBase64String(EncodedPath)) : null;
 
         [JsonIgnore]
         public string Folder => Path.GetDirectoryName(FilePath);

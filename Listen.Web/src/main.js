@@ -10,9 +10,10 @@ Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 
 window.api = async function (query) {
-  let queryString = '{query:"' + query + '"}'
+  var escapedQuery = query.replace(/"/g, '\\"')
+  let queryString = '{query:"' + escapedQuery + '"}'
   let ret = await axios.post('http://localhost:7000/api/', queryString)
-  return ret
+  return ret.data.data
 }
 
 /* eslint-disable no-new */

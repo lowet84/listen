@@ -1,18 +1,15 @@
 ﻿using GraphQL.Conventions.Relay;
+using Listen.Api.Model;
 
 namespace Listen.Api.Schema.Output
 {
     public class UpdateFileChangesOutput : IRelayMutationOutputObject
     {
-        public int Total { get; }
-        public int Added { get; }
-        public int Deleted { get; }
+        public Book[] NewBooks { get; }
 
-        public UpdateFileChangesOutput(int total, int added, int deleted)
+        public UpdateFileChangesOutput(Book[] newBooks)
         {
-            Total = total;
-            Added = added;
-            Deleted = deleted;
+            NewBooks = newBooks;
         }
 
         public string ClientMutationId { get; set; }

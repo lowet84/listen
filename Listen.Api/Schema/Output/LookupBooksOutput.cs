@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GraphQL.Conventions.Relay;
+﻿using GraphQL.Conventions.Relay;
 
 namespace Listen.Api.Schema.Output
 {

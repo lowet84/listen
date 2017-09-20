@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using GraphQlRethinkDbLibrary;
 using GraphQlRethinkDbLibrary.Database.Search;
 using GraphQlRethinkDbLibrary.Schema.Output;
 using GraphQL.Conventions;
 using Listen.Api.Model;
-using Listen.Api.Utils;
-using RethinkDb.Driver.Ast;
+using Listen.Api.Utils.Misc;
+using Listen.Api.Utils.Search;
 
 namespace Listen.Api.Schema
 {
@@ -29,15 +27,15 @@ namespace Listen.Api.Schema
             if (imageId != null)
             {
                 var remoteImage = context.Get<RemoteImage>(imageId.Value, UserContext.ReadType.Shallow);
-                if(remoteImage == null)
+                if (remoteImage == null)
                     throw new Exception("Id does not match any image");
-                var imageContext = new UserContext("query{allImages{id}}");
+                var imageContext = new UserContext("query{dummy{id}}");
                 var newCoverImage =
                     imageContext.Search<CoverImage>("EncodedUrl", remoteImage.EncodedUrl, UserContext.ReadType.WithDocument)
                     .FirstOrDefault();
                 if (newCoverImage == null)
                 {
-                    newCoverImage = new CoverImage(remoteImage.Url,MiscUtils.DownloadImage(remoteImage.Url));
+                    newCoverImage = new CoverImage(remoteImage.Url, MiscUtils.DownloadImage(remoteImage.Url));
                     context.AddDefault(newCoverImage);
                 }
                 image = newCoverImage;
@@ -47,7 +45,8 @@ namespace Listen.Api.Schema
                 author ?? oldBook.Author,
                 oldBook.Path,
                 image,
-                false);
+                BookState.Manual,
+                oldBook.AudioFiles);
 
             context.UpdateDefault(newBook, oldBook.Id);
             return new DefaultResult<Book>(newBook);

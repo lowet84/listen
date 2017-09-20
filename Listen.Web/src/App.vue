@@ -6,17 +6,7 @@
 
 <script>
 export default {
-  name: 'app',
-  created () {
-    this.getCount()
-  },
-  methods: {
-    async getCount () {
-      // eslint-disable-next-line no-undef
-      let result = await window.api('query{allBooks{title}}')
-      console.log(result.data.data.allBooks)
-    }
-  }
+  name: 'app'
 }
 </script>
 

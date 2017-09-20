@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using GraphQlRethinkDbLibrary;
 using GraphQL.Conventions;
 using Listen.Api.Model;

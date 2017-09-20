@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using GraphQlRethinkDbLibrary.Schema.Types;
-using Listen.Api.Utils;
 using Newtonsoft.Json;
 
 namespace Listen.Api.Model
@@ -14,19 +10,33 @@ namespace Listen.Api.Model
         public string Title { get; }
         public string Author { get; }
         public string EncodedPath { get; }
+        public AudioFile[] AudioFiles { get; }
 
         [JsonIgnore]
-        public string Path => Encoding.UTF8.GetString(Convert.FromBase64String(EncodedPath));
+        public string Path => EncodedPath == null ? null : Encoding.UTF8.GetString(Convert.FromBase64String(EncodedPath));
         public CoverImage CoverImage { get; }
-        public int Failed { get; set; }
+        public int State { get; set; }
 
-        public Book(string title, string author, string path, CoverImage coverImage, bool failed)
+        [JsonIgnore]
+        public BookState BookState => (BookState)State;
+
+        public Book(string title, string author, string path, CoverImage coverImage, BookState state, AudioFile[] audioFiles)
         {
             Title = title;
             Author = author;
-            EncodedPath = Convert.ToBase64String(Encoding.UTF8.GetBytes(path));
+            EncodedPath = path != null ? Convert.ToBase64String(Encoding.UTF8.GetBytes(path)) : null;
             CoverImage = coverImage;
-            Failed = failed ? 1 : 0;
+            AudioFiles = audioFiles;
+            State = (int)state;
         }
+    }
+
+    public enum BookState
+    {
+        New = 0,
+        Auto = 1,
+        Failed = 2,
+        Manual = 3,
+        Deleted = 4
     }
 }
