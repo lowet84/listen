@@ -3,23 +3,40 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+import store from './store'
 
-Vue.use(VueAxios, axios)
+// Components
+import Menu from '@/components/Menu'
+
+Vue.component('listen-menu', Menu)
+
+import 'vue-material/dist/vue-material.css'
+
+var VueMaterial = require('vue-material')
+
+Vue.use(VueMaterial)
 Vue.config.productionTip = false
 
-window.api = async function (query) {
-  var escapedQuery = query.replace(/"/g, '\\"')
-  let queryString = '{query:"' + escapedQuery + '"}'
-  let ret = await axios.post('http://localhost:7000/api/', queryString)
-  return ret.data.data
-}
+Vue.material.registerTheme({
+  default: {
+    primary: 'blue',
+    accent: 'red'
+  },
+  green: {
+    primary: 'green',
+    accent: 'pink'
+  },
+  orange: {
+    primary: 'orange',
+    accent: 'green'
+  }
+})
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })
