@@ -33,7 +33,7 @@ export function loginIfNeeded (path) {
     window.location.href = '/'
     return
   }
-  if (!isLoggedIn()) {
+  if (!isLoggedIn() || isTokenExpired()) {
     login()
   }
 }
@@ -107,5 +107,6 @@ function getTokenExpirationDate (encodedToken) {
 
 function isTokenExpired (token) {
   const expirationDate = getTokenExpirationDate(token)
-  return expirationDate < new Date()
+  let UTCnow = new Date()
+  return expirationDate < UTCnow
 }
