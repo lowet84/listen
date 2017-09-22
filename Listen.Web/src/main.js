@@ -7,14 +7,17 @@ import store from './store'
 
 // Components
 import Menu from '@/components/Menu'
+import Login from '@/components/Login'
 
 Vue.component('listen-menu', Menu)
+Vue.component('login', Login)
 
 import 'vue-material/dist/vue-material.css'
 
 var VueMaterial = require('vue-material')
 
 Vue.use(VueMaterial)
+
 Vue.config.productionTip = false
 
 Vue.material.registerTheme({

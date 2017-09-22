@@ -31,7 +31,7 @@ namespace Listen.Api
                 env,
                 new DatabaseName(Program.DatabaseName),
                 new DatabaseUrl("localhost"),
-                new GraphQlDefaultHandler<Query, Mutation>(),
+                new GraphQlHandler<Query, Mutation>(),
                 new ImageHandler());
         }
     }

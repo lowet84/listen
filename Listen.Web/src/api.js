@@ -1,6 +1,7 @@
 import VueAxios from 'vue-axios'
 import Axios from 'axios'
 import Vue from 'vue'
+import { getAccessToken } from './auth'
 
 const host = 'http://localhost:7000/api/'
 
@@ -14,7 +15,8 @@ export default async function (query) {
   var escapedQuery = query
     .replace(/"/g, '\\"')
   let queryString = '{query:"' + escapedQuery + '"}'
-  let ret = await Axios.post(host, queryString)
+  var headers = { headers: { Authorization: `Bearer ${getAccessToken()}` } }
+  let ret = await Axios.post(host, queryString, headers)
   return ret.data.data
 }
 
