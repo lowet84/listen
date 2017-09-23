@@ -44,30 +44,18 @@ namespace Listen.Api.Utils.BookUtils
             var settings = SettingsUtil.Settings;
             if (settings?.Path == null)
             {
+                UpdateTime = DateTime.MinValue;
                 throw new Exception("<Path> setting has not been set");
             }
 
             var allFiles = FindAudioFiles(settings.Path);
 
-            var index = 0;
-            const int step = 100;
-            while (index < allFiles.Count)
-            {
-                var selectedFiles = allFiles.Skip(index).Take(step).ToList();
-                index += step;
+            var oldFiles = context.GetAll<AudioFile>(UserContext.ReadType.Shallow);
+            var added = allFiles.Where(d => oldFiles.All(e => e.FilePath != d.FilePath)).ToList();
+            var deleted = oldFiles.Where(d => allFiles.All(e => e.FilePath != d.FilePath)).ToList();
 
-                var encodedpaths = selectedFiles.Select(d => d.EncodedPath).ToArray();
-                var oldFiles = context.Search(
-                    new SearchObject<AudioFile>()
-                    .Add(SearchOperationType.MatchMultiple, "EncodedPath", encodedpaths),
-                    UserContext.ReadType.Shallow);
-                var added = selectedFiles.Where(d => oldFiles.All(e => e.FilePath != d.FilePath)).ToList();
-                var deleted = oldFiles.Where(d => selectedFiles.All(e => e.FilePath != d.FilePath)).ToList();
-
-                added.ForEach(d => context.AddDefault(d));
-                deleted.ForEach(d => context.Remove<AudioFile>(d.Id));
-            }
-
+            added.ForEach(d => context.AddDefault(d));
+            deleted.ForEach(d => context.Remove<AudioFile>(d.Id));
         }
 
         private static void AddMissingBooks(UserContext context, List<Book> books, List<string> folders, AudioFile[] audioFiles)

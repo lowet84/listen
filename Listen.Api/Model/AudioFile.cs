@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using GraphQlRethinkDbLibrary.Attributes;
 using GraphQlRethinkDbLibrary.Schema.Types;
 using Microsoft.AspNetCore.StaticFiles;
 using Newtonsoft.Json;
@@ -10,6 +11,7 @@ namespace Listen.Api.Model
 {
     public class AudioFile : NodeBase<AudioFile>
     {
+        [SecondaryIndex]
         public string EncodedPath { get; }
 
         public AudioFile(string filePath)

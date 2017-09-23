@@ -9,13 +9,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GraphQlRethinkDbLibrary" Version="1.0.4" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.5.5" />
+    <PackageReference Include="GraphQlRethinkDbLibrary" Version="1.0.5" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.5.6-beta4" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.0.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.1.4" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.0-preview1-408290725" />
     <PackageReference Include="Taglib-Sharp-NetStandard" Version="1.0.0" />
   </ItemGroup>
 
