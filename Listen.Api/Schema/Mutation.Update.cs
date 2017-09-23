@@ -11,11 +11,10 @@ namespace Listen.Api.Schema
     public partial class Mutation
     {
         [Description("Find files and update file list")]
-        public DefaultResult<UpdateFileChangesOutput> UpdateFileChanges(UserContext context)
+        public DefaultResult<string> UpdateFileChanges(UserContext context)
         {
-            var ret = UpdateBooks.UpdateBooksFolder();
-            var newBooks = ret.Where(d => d.BookState == BookState.New).ToArray();
-            return new DefaultResult<UpdateFileChangesOutput>(new UpdateFileChangesOutput(newBooks));
+            UpdateBooks.UpdateBooksFolder();
+            return new DefaultResult<string>("done");
         }
 
         [Description("Look up book title, author and image")]

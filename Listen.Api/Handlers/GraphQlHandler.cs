@@ -20,12 +20,13 @@ namespace Listen.Api.Handlers
                 ((Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.FrameRequestHeaders)context.Request.Headers)
                 .HeaderAuthorization;
             var token = tokenHeader.ToString().Replace("Bearer", string.Empty).Trim();
-            var tokenDecoder = new JwtSecurityTokenHandler();
-            var jwtSecurityToken = (JwtSecurityToken)tokenDecoder.ReadToken(token);
-            if (!ValidateToken(jwtSecurityToken))
-                throw new Exception("Authentication error!");
-            _user = jwtSecurityToken.Subject;
-
+            if (!string.IsNullOrEmpty(token))
+            {
+                var tokenDecoder = new JwtSecurityTokenHandler();
+                var jwtSecurityToken = (JwtSecurityToken) tokenDecoder.ReadToken(token);
+                if (ValidateToken(jwtSecurityToken))
+                    _user = jwtSecurityToken.Subject;
+            }
             return base.Process(context);
         }
 

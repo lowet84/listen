@@ -21,7 +21,7 @@ export default async function (query) {
 }
 
 const defaultQueries = {
-  updateFileChanges: 'mutation{updateFileChanges{result{clientMutationId}}}',
+  updateFileChanges: 'mutation{updateFileChanges{clientMutationId}}',
   allBooks: 'query{allBooks{title author id state bookState coverImage{id}}}',
   settings: 'query{settings{autoMatchThreshold path}}'
 }

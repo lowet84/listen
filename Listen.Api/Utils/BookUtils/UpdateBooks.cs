@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using GraphQlRethinkDbLibrary;
+using GraphQlRethinkDbLibrary.Database.Search;
 using GraphQL.Conventions;
 using Listen.Api.Model;
 using Listen.Api.Utils.Misc;
@@ -15,33 +18,56 @@ namespace Listen.Api.Utils.BookUtils
 {
     public static class UpdateBooks
     {
-        public static List<Book> UpdateBooksFolder()
+        private static Task UpdateTask { get; set; }
+        private static DateTime UpdateTime { get; set; }
+
+        public static void UpdateBooksFolder()
         {
-            var context = new UserContext();
-            UpdateAudioFiles(context);
-            var audioFiles = context.GetAll<AudioFile>(UserContext.ReadType.Shallow);
-            var folders = audioFiles.Select(d => d.Folder).Distinct().ToList();
-            var books = context.GetAll<Book>(UserContext.ReadType.Shallow).ToList();
-            DeleteRemovedBooks(context, books, folders);
-            AddMissingBooks(context, books, folders, audioFiles);
-            return books;
+            if (UpdateTime >= DateTime.Now.AddMinutes(-5) || UpdateTask?.Status == TaskStatus.Running) return;
+
+            UpdateTask = new Task(() =>
+            {
+                var context = new UserContext();
+                UpdateAudioFiles(context);
+                var audioFiles = context.GetAll<AudioFile>(UserContext.ReadType.Shallow);
+                var folders = audioFiles.Select(d => d.Folder).Distinct().ToList();
+                var books = context.GetAll<Book>(UserContext.ReadType.Shallow).ToList();
+                DeleteRemovedBooks(context, books, folders);
+                AddMissingBooks(context, books, folders, audioFiles);
+            });
+            UpdateTime = DateTime.Now;
+            UpdateTask.Start();
         }
 
         private static void UpdateAudioFiles(UserContext context)
         {
-            var oldFiles = context.GetAll<AudioFile>(UserContext.ReadType.Shallow);
             var settings = SettingsUtil.Settings;
             if (settings?.Path == null)
             {
                 throw new Exception("<Path> setting has not been set");
             }
 
-            var files = FindAudioFiles(settings.Path);
-            var added = files.Where(d => oldFiles.All(e => e.FilePath != d.FilePath)).ToList();
-            var deleted = oldFiles.Where(d => files.All(e => e.FilePath != d.FilePath)).ToList();
+            var allFiles = FindAudioFiles(settings.Path);
 
-            added.ForEach(d => context.AddDefault(d));
-            deleted.ForEach(d => context.Remove<AudioFile>(d.Id));
+            var index = 0;
+            const int step = 100;
+            while (index < allFiles.Count)
+            {
+                var selectedFiles = allFiles.Skip(index).Take(step).ToList();
+                index += step;
+
+                var encodedpaths = selectedFiles.Select(d => d.EncodedPath).ToArray();
+                var oldFiles = context.Search(
+                    new SearchObject<AudioFile>()
+                    .Add(SearchOperationType.MatchMultiple, "EncodedPath", encodedpaths),
+                    UserContext.ReadType.Shallow);
+                var added = selectedFiles.Where(d => oldFiles.All(e => e.FilePath != d.FilePath)).ToList();
+                var deleted = oldFiles.Where(d => selectedFiles.All(e => e.FilePath != d.FilePath)).ToList();
+
+                added.ForEach(d => context.AddDefault(d));
+                deleted.ForEach(d => context.Remove<AudioFile>(d.Id));
+            }
+
         }
 
         private static void AddMissingBooks(UserContext context, List<Book> books, List<string> folders, AudioFile[] audioFiles)
