@@ -1,9 +1,10 @@
+/* global __api__ */
 import VueAxios from 'vue-axios'
 import Axios from 'axios'
 import Vue from 'vue'
 import { getAccessToken } from './auth'
 
-const host = 'http://localhost:7000/api/'
+const host = __api__ + '/api/'
 
 Vue.use(VueAxios, Axios)
 

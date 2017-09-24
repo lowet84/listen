@@ -19,7 +19,8 @@ module.exports = merge(baseWebpackConfig, {
   devtool: 'inline-sourcemap',
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': config.dev.env
+      'process.env': config.dev.env,
+      '__api__': "'http://localhost:7000'"
     }),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.HotModuleReplacementPlugin(),

@@ -3,7 +3,7 @@
     <md-list class="md-triple-line">
       <md-list-item v-for="book in $store.state.books" :key="book.id" @click="log('play')">
         <md-avatar class="md-large">
-          <img :src="'http://localhost:7000/images/' + book.coverImage.id" alt="Book">
+          <img :src="imageUrl(book.coverImage.id)" alt="Book">
         </md-avatar>
 
         <div class="md-list-text-container">
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+/* global __api__ */
 import { mapMutations, mapActions } from 'vuex'
 export default {
   created () {
@@ -39,6 +40,10 @@ export default {
     },
     edit (id) {
       this.$router.push(`/edit/${id}`)
+    },
+    imageUrl (id) {
+      if (this.$store.state.books === undefined) return ''
+      return `${__api__}/images/${id}`
     }
   }
 }
