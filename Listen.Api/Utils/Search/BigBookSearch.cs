@@ -83,7 +83,7 @@ namespace Listen.Api.Utils.Search
 
         private static BookSearchResult CreateBookSearchResult(AmazonResult amazonResult)
         {
-            var title = amazonResult.HtmlDocument.GetElementbyId("productTitle").InnerText;
+            var title = amazonResult.HtmlDocument.GetElementbyId("productTitle")?.InnerText;
             var author = amazonResult.HtmlDocument.DocumentNode
                 .Descendants("a"
                 ).FirstOrDefault(d => d.Attributes.Contains("class")

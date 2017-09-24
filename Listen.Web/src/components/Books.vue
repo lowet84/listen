@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-list class="md-double-line">
+    <md-list class="md-triple-line">
       <md-list-item v-for="book in $store.state.books" :key="book.id" @click="log('play')">
         <md-avatar class="md-large">
           <img :src="'http://localhost:7000/images/' + book.coverImage.id" alt="Book">
@@ -9,9 +9,10 @@
         <div class="md-list-text-container">
           <span>{{book.title}}</span>
           <span>{{book.author}}</span>
+          <span>{{book.path}}</span>
         </div>
 
-        <md-button class="md-icon-button md-list-action" @click="log('edit')">
+        <md-button class="md-icon-button md-list-action" @click="edit(book.id)">
           <md-icon class="md-primary">edit</md-icon>
         </md-button>
 
@@ -35,6 +36,9 @@ export default {
       'updateBooks']),
     log (text) {
       console.log(text)
+    },
+    edit (id) {
+      this.$router.push(`/edit/${id}`)
     }
   }
 }

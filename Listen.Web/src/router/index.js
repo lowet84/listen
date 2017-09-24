@@ -2,8 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Books from '@/components/Books'
 import Settings from '@/components/Settings'
-import Login from '@/components/Login'
-import Callback from '@/components/Callback'
+import EditBook from '@/components/EditBook'
 
 Vue.use(Router)
 
@@ -20,14 +19,10 @@ export default new Router({
       component: Settings
     },
     {
-      path: '/login',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/callback',
-      name: 'Callback',
-      component: Callback
+      path: '/edit/:id',
+      name: 'EditBook',
+      component: EditBook,
+      props: true
     }
   ]
 })

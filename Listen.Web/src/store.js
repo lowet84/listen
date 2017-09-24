@@ -31,7 +31,7 @@ const actions = {
   async updateBooks () {
     await Api('#updateFileChanges')
     let books = await Api('#allBooks')
-    state.books = books.allBooks
+    Vue.set(state, 'books', books.allBooks)
     for (var index = 0; index < state.books.length; index++) {
       var element = state.books[index]
       if (element.state === 0) {

@@ -7,10 +7,8 @@ import store from './store'
 
 // Components
 import Menu from '@/components/Menu'
-import Login from '@/components/Login'
 
 Vue.component('listen-menu', Menu)
-Vue.component('login', Login)
 
 import 'vue-material/dist/vue-material.css'
 

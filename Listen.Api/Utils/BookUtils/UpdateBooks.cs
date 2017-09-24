@@ -154,8 +154,11 @@ namespace Listen.Api.Utils.BookUtils
             }
             var tagSearchString1 = $"{author} {title}";
             var tagSearchString2 = $"{author} {album}";
+            var searches = new[] { folderSearchString, tagSearchString1, tagSearchString2 }
+                .Where(d => !string.IsNullOrEmpty(d.Trim()))
+                .ToArray();
 
-            var results = BigBookSearch.Search(folderSearchString, tagSearchString1, tagSearchString2);
+            var results = BigBookSearch.Search(searches);
             var bestResult = results.OrderByDescending(d => d.Number).FirstOrDefault(d => d.Author != null && d.Title != null);
             if (bestResult == null || bestResult.Number < SettingsUtil.Settings.AutoMatchThreshold)
             {
