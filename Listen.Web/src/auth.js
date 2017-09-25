@@ -33,7 +33,7 @@ export function loginIfNeeded (path) {
     window.location.href = '/'
     return
   }
-  if (!isLoggedIn() || isTokenExpired()) {
+  if (!isLoggedIn() || isTokenExpired(getIdToken())) {
     login()
   }
 }
@@ -96,6 +96,7 @@ export function isLoggedIn () {
 }
 
 function getTokenExpirationDate (encodedToken) {
+  if (encodedToken === undefined) return undefined
   const token = decode(encodedToken)
   if (!token.exp) { return null }
 

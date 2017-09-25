@@ -1,62 +1,87 @@
 <template>
-  <md-card>
+  <md-card v-if="book!==null">
     <md-card-media>
-      <img :src="imageUrl" alt="People">
+      <div class="cover-image">
+        <img :src="imageUrl" alt="People">
+      </div>
     </md-card-media>
 
     <md-card-header>
-      <div class="md-title">Title goes here</div>
-      <div class="md-subhead">Subtitle here</div>
+      <md-input-container class="md-title">
+        <label>Title</label>
+        <md-input v-model="book.title"></md-input>
+      </md-input-container>
+      <md-input-container class="md-subhead">
+        <label>Author</label>
+        <md-input v-model="book.author"></md-input>
+      </md-input-container>
     </md-card-header>
 
     <md-card-actions>
-      <md-button>Action</md-button>
-      <md-button>Action</md-button>
+      <md-button class="md-accent" @click="searchForCovers">Find cover image</md-button>
+      <md-button class="md-primary" @click="save">Save</md-button>
     </md-card-actions>
 
     <md-card-content>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea, nostrum odio. Dolores, sed accusantium quasi non, voluptas eius illo quas, saepe voluptate pariatur in deleniti minus sint. Excepturi.
-    </md-card-content>
+    {{book.path}}
+  </md-card-content>
   </md-card>
 </template>
 
 <script>
 /* global __api__ */
-import Api from '../api'
+import { mapMutations, mapActions } from 'vuex'
 export default {
+
   data () {
     return {
-      book: undefined
     }
   },
+
   created () {
     this.init()
+    this.setActivePage('Editing book')
   },
+
   computed: {
+    book: function () {
+      return this.$store.state.editingBook
+    },
     imageUrl: function () {
-      if (this.book === undefined) return ''
       return `${__api__}/images/${this.book.coverImage.id}`
     }
   },
+
   methods: {
     async init () {
-      let book = await this.getBook(this.id)
-      this.book = book
-    },
-    async getBook (id) {
-      let storeBook = this.$store.state.books.find(d => d.id === this.id)
-      if (storeBook !== undefined) {
-        return storeBook
+      if (this.$store.state.editingBook != null &&
+        this.$store.state.editingBook.id === this.id) {
+        return
       }
-      let apiBook = await Api(`query{book(id:"${id}"){title author coverImage{id}}}`)
-      return apiBook.book
+      let book = await this.getBook(this.id)
+      this.setEditingBook(book)
+    },
+    ...mapMutations([
+      'setActivePage', 'setEditingBook', 'saveBook']),
+    ...mapActions(['getBook']),
+    async save () {
+      await this.saveBook(this.book)
+    },
+    async searchForCovers () {
+      this.$router.push('/searchCover')
+      this.isSearchingCovers = true
     }
   },
+
   props: ['id'],
+
   name: 'editBook'
 }
 </script>
 
 <style>
-
+.cover-image {
+  max-height: 400px;
+  overflow: hidden;
+}
 </style>

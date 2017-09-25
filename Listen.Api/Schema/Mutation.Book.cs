@@ -24,7 +24,7 @@ namespace Listen.Api.Schema
             if (oldBook == null)
                 return null;
             var image = oldBook.CoverImage;
-            if (imageId != null)
+            if (imageId != null && imageId.Value.IsIdentifierForType<RemoteImage>())
             {
                 var remoteImage = context.Get<RemoteImage>(imageId.Value, UserContext.ReadType.Shallow);
                 if (remoteImage == null)

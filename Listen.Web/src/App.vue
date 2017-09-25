@@ -19,6 +19,6 @@ export default {
 
 <style>
 .main {
-  margin-left: 10px;
+  margin: 10px;
 }
 </style>

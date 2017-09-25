@@ -42,7 +42,6 @@ export default {
       this.$router.push(`/edit/${id}`)
     },
     imageUrl (id) {
-      if (this.$store.state.books === undefined) return ''
       return `${__api__}/images/${id}`
     }
   }
