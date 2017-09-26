@@ -2,10 +2,12 @@
   <div class="phone-viewport">
 
     <md-toolbar>
-      <md-button class="md-icon-button" @click="toggleLeftSidenav">
+      <md-button v-if="!$store.state.backPage" class="md-icon-button" @click="toggleLeftSidenav">
         <md-icon>menu</md-icon>
       </md-button>
-
+      <md-button v-if="$store.state.backPage" class="md-icon-button" @click="back">
+        <md-icon>arrow_back</md-icon>
+      </md-button>
       <h2 class="md-title" style="flex: 1">{{$store.state.activePage}}</h2>
     </md-toolbar>
 
@@ -45,6 +47,9 @@ export default {
     },
     toggleLeftSidenav () {
       this.$refs.leftSidenav.toggle()
+    },
+    back () {
+      history.back()
     }
   }
 }

@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 const state = {
   activePage: '-',
+  backPage: false,
   books: [],
   settings: null,
   editingBook: null
@@ -13,7 +14,8 @@ const state = {
 
 const mutations = {
   setActivePage (state, page) {
-    state.activePage = page
+    state.activePage = page.name
+    state.backPage = page.back === true
   },
   setEditingBook (state, book) {
     state.editingBook = book
@@ -82,11 +84,18 @@ const actions = {
       '"){result{images{url id contentType}}}}'
     let searchResult = await Api(searchMutation)
     return searchResult.searchForCovers.result.images
+  },
+  async addFirstUser (state, userName) {
+    await Api(`mutation{addFirstUser(userName:"${userName}"){result{id}}}`)
   }
 }
 
 // getters are functions
 const getters = {
+  async isFirstLogin (state) {
+    let result = await Api('query{isFirstLogin{result}}')
+    return result.isFirstLogin.result
+  }
 }
 
 export default new Vuex.Store({

@@ -4,6 +4,7 @@ import Books from '@/components/Books'
 import Settings from '@/components/Settings'
 import EditBook from '@/components/EditBook'
 import CoverSearch from '@/components/CoverSearch'
+import FirstLogin from '@/components/FirstLogin'
 
 Vue.use(Router)
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/searchCover',
       name: 'CoverSearch',
       component: CoverSearch
+    },
+    {
+      path: '/firstLogin',
+      name: 'FirstLogin',
+      component: FirstLogin
     }
   ]
 })

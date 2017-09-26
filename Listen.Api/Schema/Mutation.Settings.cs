@@ -3,6 +3,7 @@ using GraphQlRethinkDbLibrary;
 using GraphQlRethinkDbLibrary.Schema.Output;
 using GraphQL.Conventions;
 using Listen.Api.Model;
+using Listen.Api.Utils.UserUtils;
 
 namespace Listen.Api.Schema
 {
@@ -14,6 +15,7 @@ namespace Listen.Api.Schema
             string path,
             int? autoMatchThreshold)
         {
+            UserUtil.IsAuthorized(context, UserType.Admin);
             var oldSettings = context.Search<Settings>("Path", "", UserContext.ReadType.Shallow)?.FirstOrDefault();
 
             var newSettings = new Settings(

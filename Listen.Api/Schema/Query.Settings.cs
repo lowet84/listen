@@ -2,6 +2,7 @@
 using GraphQlRethinkDbLibrary;
 using GraphQL.Conventions;
 using Listen.Api.Model;
+using Listen.Api.Utils.UserUtils;
 
 namespace Listen.Api.Schema
 {
@@ -10,6 +11,7 @@ namespace Listen.Api.Schema
         [Description("The app settings")]
         public Settings Settings(UserContext context)
         {
+            UserUtil.IsAuthorized(context, UserType.Normal);
             var settings = context.Search<Settings>("id", "", UserContext.ReadType.WithDocument).FirstOrDefault();
             return settings;
         }

@@ -27,7 +27,7 @@
 import { mapMutations, mapActions } from 'vuex'
 export default {
   created () {
-    this.setActivePage('Books')
+    this.setActivePage({ name: 'Books' })
     this.updateBooks()
   },
   methods: {

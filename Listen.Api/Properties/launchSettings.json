@@ -17,7 +17,8 @@
     "Listen.Api": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DEBUG_USER": true 
       },
       "applicationUrl": "http://localhost:58560/"
     }

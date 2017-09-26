@@ -23,7 +23,7 @@ export default {
     }
   },
   created () {
-    this.setActivePage('Settings')
+    this.setActivePage({ name: 'Settings' })
     this.updateSettings()
   },
   computed: {

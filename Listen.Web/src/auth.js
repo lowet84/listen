@@ -41,7 +41,6 @@ export function loginIfNeeded (path) {
 export function logout () {
   clearIdToken()
   clearAccessToken()
-  // router.go('/')
 }
 
 export function requireAuth (to, from, next) {
@@ -91,7 +90,9 @@ export function setIdToken () {
 
 export function isLoggedIn () {
   const idToken = getIdToken()
-  let loggedIn = !!idToken && !isTokenExpired(idToken)
+  const accessToken = getAccessToken()
+  let loggedIn = !!idToken && !isTokenExpired(idToken) &&
+    !!accessToken && !isTokenExpired(accessToken)
   return loggedIn
 }
 
@@ -102,7 +103,6 @@ function getTokenExpirationDate (encodedToken) {
 
   const date = new Date(0)
   date.setUTCSeconds(token.exp)
-
   return date
 }
 

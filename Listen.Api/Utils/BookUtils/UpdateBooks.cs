@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using GraphQlRethinkDbLibrary;
-using GraphQlRethinkDbLibrary.Database.Search;
 using GraphQL.Conventions;
 using Listen.Api.Model;
 using Listen.Api.Utils.Misc;

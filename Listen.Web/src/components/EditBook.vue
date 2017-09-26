@@ -23,8 +23,8 @@
     </md-card-actions>
 
     <md-card-content>
-    {{book.path}}
-  </md-card-content>
+      {{book.path}}
+    </md-card-content>
   </md-card>
 </template>
 
@@ -40,7 +40,7 @@ export default {
 
   created () {
     this.init()
-    this.setActivePage('Editing book')
+    this.setActivePage({ name: 'Editing book', back: true })
   },
 
   computed: {

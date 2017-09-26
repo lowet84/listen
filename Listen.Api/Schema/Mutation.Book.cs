@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Text;
 using GraphQlRethinkDbLibrary;
-using GraphQlRethinkDbLibrary.Database.Search;
 using GraphQlRethinkDbLibrary.Schema.Output;
 using GraphQL.Conventions;
 using Listen.Api.Model;
 using Listen.Api.Utils.Misc;
 using Listen.Api.Utils.Search;
+using Listen.Api.Utils.UserUtils;
 
 namespace Listen.Api.Schema
 {
@@ -20,6 +20,7 @@ namespace Listen.Api.Schema
             string author,
             Id? imageId)
         {
+            UserUtil.IsAuthorized(context, UserType.Admin);
             var oldBook = context.Get<Book>(bookId, UserContext.ReadType.Shallow);
             if (oldBook == null)
                 return null;
@@ -56,12 +57,10 @@ namespace Listen.Api.Schema
             UserContext context,
             string searchString)
         {
+            UserUtil.IsAuthorized(context, UserType.Admin);
             var results = BigBookSearch.SearchBigBookSearch(searchString);
-            var encodedUrls = results.Select(d => Convert.ToBase64String(Encoding.UTF8.GetBytes(d.Img)))
-                .ToArray();
-            var existing = context.Search(
-                new SearchObject<RemoteImage>()
-                    .Add(SearchOperationType.MatchMultiple, "EncodedUrl", encodedUrls)
+            var encodedUrls = results.Select(d => Convert.ToBase64String(Encoding.UTF8.GetBytes(d.Img)));
+            var existing = context.Search<RemoteImage>(d => d.Filter(r => r.G("EncodedUrl").Eq(string.Join("|", encodedUrls)))
                 , UserContext.ReadType.Shallow);
 
             var newImages = results

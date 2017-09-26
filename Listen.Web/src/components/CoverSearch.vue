@@ -24,6 +24,7 @@ export default {
   },
   name: 'coverSearch',
   created () {
+    this.setActivePage({ name: 'Find cover images', back: true })
     if (this.$store.state.editingBook == null) {
       this.$router.push('/')
     }
@@ -36,7 +37,7 @@ export default {
   },
   methods: {
     ...mapActions(['searchCovers']),
-    ...mapMutations(['setEditingBookCover']),
+    ...mapMutations(['setEditingBookCover', 'setActivePage']),
     async search () {
       let covers = await this.searchCovers(
         `${this.book.title} ${this.book.author}`)
