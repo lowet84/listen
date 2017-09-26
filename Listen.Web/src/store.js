@@ -87,6 +87,11 @@ const actions = {
   },
   async addFirstUser (state, userName) {
     await Api(`mutation{addFirstUser(userName:"${userName}"){result{id}}}`)
+  },
+  async applyForLogin (state, userName) {
+    let mutation = `mutation{applyForLogin(userName:"${userName}"){result{id}}}`
+    console.log(mutation)
+    await Api(mutation)
   }
 }
 
@@ -95,6 +100,14 @@ const getters = {
   async isFirstLogin (state) {
     let result = await Api('query{isFirstLogin{result}}')
     return result.isFirstLogin.result
+  },
+  async isAuthenticated (state) {
+    let result = await Api('query{isAuthenticated{result}}')
+    return result.isAuthenticated.result
+  },
+  async getApplyingUser (state) {
+    let result = await Api('query{getApplyingUsername{result}}')
+    return result.getApplyingUsername.result
   }
 }
 

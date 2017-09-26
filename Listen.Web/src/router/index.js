@@ -5,6 +5,7 @@ import Settings from '@/components/Settings'
 import EditBook from '@/components/EditBook'
 import CoverSearch from '@/components/CoverSearch'
 import FirstLogin from '@/components/FirstLogin'
+import Apply from '@/components/Apply'
 
 Vue.use(Router)
 
@@ -35,6 +36,11 @@ export default new Router({
       path: '/firstLogin',
       name: 'FirstLogin',
       component: FirstLogin
+    },
+    {
+      path: '/apply',
+      name: 'Apply',
+      component: Apply
     }
   ]
 })

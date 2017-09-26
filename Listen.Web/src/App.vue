@@ -14,16 +14,20 @@ export default {
   name: 'app',
   created () {
     loginIfNeeded(this.$route.path)
-    this.handleFirstLogin()
+    this.handleAuthentication()
   },
   methods: {
-    async handleFirstLogin () {
+    async handleAuthentication () {
       let firstLogin = await this.isFirstLogin()
       if (firstLogin) {
         this.$router.push('/firstLogin')
       }
+      let authenticated = await this.isAuthenticated()
+      if (!authenticated) {
+        this.$router.push('/apply')
+      }
     },
-    ...mapGetters(['isFirstLogin'])
+    ...mapGetters(['isFirstLogin', 'isAuthenticated'])
   }
 }
 </script>

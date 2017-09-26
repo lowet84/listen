@@ -28,6 +28,11 @@
           <md-icon>settings</md-icon>
           <span>Settings</span>
         </md-list-item>
+
+        <md-list-item @click="handleLogout">
+          <md-icon>exit_to_app</md-icon>
+          <span>Log out</span>
+        </md-list-item>
       </md-list>
     </md-sidenav>
 
@@ -35,6 +40,7 @@
 </template>
 
 <script>
+import { logout } from '../auth'
 export default {
   data () {
     return {
@@ -50,6 +56,11 @@ export default {
     },
     back () {
       history.back()
+    },
+    handleLogout () {
+      logout()
+      this.$router.push('/')
+      location.reload()
     }
   }
 }

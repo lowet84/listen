@@ -11,8 +11,7 @@ namespace Listen.Api.Schema
         public Book[] AllBooks(UserContext context)
         {
             UserUtil.IsAuthorized(context, UserType.Admin, UserType.Normal);
-            var books = context.Search<Book>("id", "", UserContext.ReadType.WithDocument);
-            return books;
+            return context.GetAll<Book>(UserContext.ReadType.WithDocument);
         }
 
         [Description("Get book by id")]
