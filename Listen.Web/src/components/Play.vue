@@ -1,30 +1,25 @@
 <template>
   <md-card v-if="book!==null">
-    <md-card-media>
-      <div class="cover-image">
-        <img :src="book.imageUrl" alt="Cover image">
-      </div>
-    </md-card-media>
+    <md-card-media-cover>
+      <md-card-media>
+        <div class="cover-image">
+          <img :src="book.imageUrl" alt="Cover image">
+        </div>
+      </md-card-media>
+    </md-card-media-cover>
+    <md-card-area>
+      <md-card-header>
+        <div class="md-title">{{book.title}}</div>
+        <div class="md-subhead">{{book.author}}</div>
+      </md-card-header>
 
-    <md-card-header>
-      <md-input-container class="md-title">
-        <label>Title</label>
-        <md-input v-model="book.title"></md-input>
-      </md-input-container>
-      <md-input-container class="md-subhead">
-        <label>Author</label>
-        <md-input v-model="book.author"></md-input>
-      </md-input-container>
-    </md-card-header>
+      <!-- <md-card-actions>
+        <md-button>Action</md-button>
+        <md-button>Action</md-button>
+      </md-card-actions> -->
+    </md-card-area>
+    <md-progress md-progress="50" class="progress md-accent"></md-progress>
 
-    <md-card-actions>
-      <md-button class="md-accent" @click="searchForCovers">Find cover image</md-button>
-      <md-button class="md-primary" @click="save">Save</md-button>
-    </md-card-actions>
-
-    <md-card-content>
-      {{book.path}}
-    </md-card-content>
   </md-card>
 </template>
 
@@ -39,7 +34,7 @@ export default {
 
   created () {
     this.init()
-    this.setActivePage({ name: 'Editing book', back: '/books' })
+    this.setActivePage({ name: 'Playing', back: '/books' })
   },
 
   computed: {
@@ -55,7 +50,6 @@ export default {
         return
       }
       let book = await this.getBook(this.id)
-      console.log(book)
       this.setEditingBook(book)
     },
     ...mapMutations([
@@ -76,9 +70,17 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .cover-image {
-  max-height: 400px;
+  /* max-height: 400px; */
   overflow: hidden;
+}
+
+.progress {
+  height: 30px;
+}
+
+.main {
+  margin: 0px
 }
 </style>

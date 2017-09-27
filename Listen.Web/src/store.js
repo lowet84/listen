@@ -77,8 +77,8 @@ const actions = {
       state.settings = { autoMatchThreshold: 100, path: '' }
     }
   },
-  async getBook (state, id) {
-    let storeBook = state.state.books.find(d => d.id === id)
+  async getBook (store, id) {
+    let storeBook = state.books.find(d => d.id === id)
     if (storeBook !== undefined) {
       return storeBook
     }
@@ -88,7 +88,7 @@ const actions = {
     apiBook.book.imageUrl = `${__api__}/images/${apiBook.book.coverImage.id}___${token}`
     return apiBook.book
   },
-  async searchCovers (state, string) {
+  async searchCovers (store, string) {
     var searchMutation =
       'mutation{searchForCovers(searchString:"' +
       `${string}` +
@@ -96,10 +96,10 @@ const actions = {
     let searchResult = await Api(searchMutation)
     return searchResult.searchForCovers.result.images
   },
-  async addFirstUser (state, userName) {
+  async addFirstUser (store, userName) {
     await Api(`mutation{addFirstUser(userName:"${userName}"){result{id}}}`)
   },
-  async applyForLogin (state, userName) {
+  async applyForLogin (store, userName) {
     let mutation = `mutation{applyForLogin(userName:"${userName}"){result{id}}}`
     await Api(mutation)
   },
@@ -127,15 +127,15 @@ const actions = {
 
 // getters are functions
 const getters = {
-  async isFirstLogin (state) {
+  async isFirstLogin (store) {
     let result = await Api('query{isFirstLogin{result}}')
     return result.isFirstLogin.result
   },
-  async isAuthenticated (state) {
+  async isAuthenticated (store) {
     let result = await Api('query{isAuthenticated{result}}')
     return result.isAuthenticated.result
   },
-  async getApplyingUser (state) {
+  async getApplyingUser (store) {
     let result = await Api('query{getApplyingUsername{result}}')
     return result.getApplyingUsername.result
   }

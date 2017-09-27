@@ -1,7 +1,7 @@
 <template>
   <div class="phone-viewport">
 
-    <md-toolbar>
+    <md-toolbar class="md-dense">
       <md-button v-if="$store.state.backPage === undefined" class="md-icon-button" @click="toggleLeftSidenav">
         <md-icon>menu</md-icon>
       </md-button>

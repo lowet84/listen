@@ -13,10 +13,13 @@ import { loginIfNeeded } from './auth'
 export default {
   name: 'app',
   created () {
-    loginIfNeeded(this.$route.path)
-    this.handleAuthentication()
+    this.init()
   },
   methods: {
+    async init () {
+      await loginIfNeeded(this.$route.path)
+      await this.handleAuthentication()
+    },
     async handleAuthentication () {
       let firstLogin = await this.isFirstLogin()
       if (firstLogin) {

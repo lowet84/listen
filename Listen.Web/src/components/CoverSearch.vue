@@ -55,4 +55,8 @@ export default {
 .card {
   margin-bottom: 15px
 }
+.cover-image {
+  max-height: 400px;
+  overflow: hidden;
+}
 </style>

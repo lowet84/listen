@@ -1,23 +1,31 @@
 <template>
   <div>
-    <md-list class="md-triple-line">
-      <md-list-item v-for="book in $store.state.books" :key="book.id" @click="play">
-        <md-avatar class="md-large">
-          <img :src="book.imageUrl" alt="Book">
-        </md-avatar>
+    <md-list>
+      <md-list-item v-for="(books,name) in authors" :key="name">
+        <md-icon>person_outline</md-icon>
+        <span>{{name}} ({{books.length}})</span>
 
-        <div class="md-list-text-container">
-          <span>{{book.title}}</span>
-          <span>{{book.author}}</span>
-          <span v-if="admin">{{book.path}}</span>
-        </div>
+        <md-list-expand>
+          <md-list>
+            <md-list-item class="md-inset" v-for="book in books" :key="book.id">
+              <md-card class="card">
+                <md-card-media>
+                  <div class="cover-image">
+                    <img :src="book.imageUrl" @click="play(book.id)" />
+                  </div>
+                </md-card-media>
 
-        <md-button v-if="admin" class="md-icon-button md-list-action" @click="edit(book.id)">
-          <md-icon class="md-primary">edit</md-icon>
-        </md-button>
+                <md-card-actions>
+                  <md-button class="md-accent" @click="edit(book.id)">Edit</md-button>
+                  <md-button class="md-primary" @click="play(book.id)">Play</md-button>
+                </md-card-actions>
+              </md-card>
 
-        <md-divider class="md-inset"></md-divider>
+            </md-list-item>
+          </md-list>
+        </md-list-expand>
       </md-list-item>
+
     </md-list>
   </div>
 </template>
@@ -43,6 +51,11 @@ export default {
         return false
       }
       return true
+    },
+    authors: function () {
+      var books = this.$store.state.books
+      let authors = this.groupArrayBy(books, 'author')
+      return authors
     }
   },
   methods: {
@@ -50,11 +63,19 @@ export default {
       'setActivePage']),
     ...mapActions([
       'updateBooks', 'getImageUrl']),
-    play () {
-      console.log('play')
-    },
     edit (id) {
       this.$router.push(`/edit/${id}`)
+    },
+    groupArrayBy (array, prop) {
+      return array.reduce(function (groups, item) {
+        var val = item[prop]
+        groups[val] = groups[val] || []
+        groups[val].push(item)
+        return groups
+      }, {})
+    },
+    play (id) {
+      this.$router.push(`/play/${id}`)
     }
   }
 }
@@ -62,5 +83,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.cover-image {
+  max-height: 400px;
+  overflow: hidden;
+}
 
+.card {
+  margin-bottom: 15px
+}
 </style>

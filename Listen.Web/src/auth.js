@@ -15,6 +15,7 @@ export async function login () {
     authOptions = authResult.loginOptions.authOptions
     auth = new auth0.WebAuth(authOptions)
   }
+  loginOptions.redirectUri = window.location.href
   auth.authorize(loginOptions)
 }
 
