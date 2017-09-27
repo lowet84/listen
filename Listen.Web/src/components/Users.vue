@@ -2,7 +2,7 @@
   <div class="phone-viewport" v-if="$store.state.allUsers != null">
     <md-list>
       <md-list-item>
-        <md-icon>whatshot</md-icon>
+        <md-icon>hourglass_empty</md-icon>
         <span>{{pendingText}}</span>
 
         <md-list-expand>
@@ -17,7 +17,7 @@
       </md-list-item>
 
       <md-list-item>
-        <md-icon>videogame_asset</md-icon>
+        <md-icon>account_circle</md-icon>
         <span>{{activeText}}</span>
 
         <md-list-expand>
@@ -32,7 +32,7 @@
       </md-list-item>
 
       <md-list-item>
-        <md-icon>video_library</md-icon>
+        <md-icon>error</md-icon>
         <span>{{rejectedText}}</span>
 
         <md-list-expand>
