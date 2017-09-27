@@ -25,5 +25,6 @@ const defaultQueries = {
   updateFileChanges: 'mutation{updateFileChanges{clientMutationId}}',
   allBooks: 'query{allBooks{title author id state bookState coverImage{id} path encodedPath}}',
   settings: 'query{settings{autoMatchThreshold path}}',
-  loginOptions: 'query{loginOptions{authOptions{clientID domain} loginOptions{audience redirectUri responseType scope}}}'
+  loginOptions: 'query{loginOptions{authOptions{clientID domain} loginOptions{audience redirectUri responseType scope}}}',
+  allUsers: 'query{allUsers{id userKey userName userType}}'
 }

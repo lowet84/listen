@@ -25,13 +25,9 @@ namespace Listen.Api.Schema
         public User[] AllUsers(UserContext context)
         {
             UserUtil.IsAuthorized(context, UserType.Admin);
-            return context.GetAll<User>(UserContext.ReadType.WithDocument);
-        }
-
-        public User User(UserContext context, Id id)
-        {
-            UserUtil.IsAuthorized(context, UserType.Admin);
-            return context.Get<User>(id);
+            var ret = context.GetAll<User>(UserContext.ReadType.WithDocument);
+            ret = ret.Where(d => d.UserKey != UserUtil.DebugUserNameAndKey).ToArray();
+            return ret;
         }
 
         public User MyUser(UserContext context)
@@ -45,9 +41,16 @@ namespace Listen.Api.Schema
             if (context.UserName == null)
                 return null;
             var userResult = context.Search<User>(
-                d => d.Filter(user => user.G("UserKey").Eq(context.UserName).And(user.G("UserType").Eq(2))),
+                d => d.Filter(user => user.G("UserKey").Eq(context.UserName)),
                 UserContext.ReadType.Shallow);
-            return new DefaultResult<string>(userResult.FirstOrDefault()?.UserName ?? string.Empty);
+            var applyingUser = userResult.SingleOrDefault();
+            if(applyingUser == null)
+                return new DefaultResult<string>(string.Empty);
+            if(applyingUser.UserType == (int)UserType.Rejected)
+                return new DefaultResult<string>("Rejected");
+            if (applyingUser.UserType == (int)UserType.Pending)
+                return new DefaultResult<string>(applyingUser.UserName ?? string.Empty);
+            return null;
         }
     }
 }

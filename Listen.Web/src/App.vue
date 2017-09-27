@@ -26,7 +26,10 @@ export default {
       if (!authenticated) {
         this.$router.push('/apply')
       } else {
-        this.$router.push('/books')
+        let route = window.location.href.split('#')[1]
+        if (route === '/' || route === '/apply' || route === '/firstLogin') {
+          this.$router.push('/books')
+        }
       }
       await this.setCurrentUser()
     },

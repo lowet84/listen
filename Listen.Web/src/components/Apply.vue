@@ -14,12 +14,12 @@
     <md-card-content>
       <md-input-container>
         <label>User name</label>
-        <md-input v-model="userName"></md-input>
+        <md-input v-model="userName" ref="nameInput" :readonly="rejected"></md-input>
       </md-input-container>
     </md-card-content>
 
     <md-card-actions>
-      <md-button class="md-primary" @click="save">Save application</md-button>
+      <md-button class="md-primary" @click="save" :disabled="rejected">Save application</md-button>
     </md-card-actions>
   </md-card>
 </template>
@@ -37,6 +37,11 @@ export default {
   created () {
     this.setActivePage({ name: 'Apply for login' })
     this.init()
+  },
+  computed: {
+    rejected: function () {
+      return this.userName === 'Rejected'
+    }
   },
   methods: {
     ...mapMutations([

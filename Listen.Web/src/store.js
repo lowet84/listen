@@ -12,7 +12,8 @@ const state = {
   books: [],
   settings: null,
   editingBook: null,
-  user: null
+  user: null,
+  allUsers: null
 }
 
 const mutations = {
@@ -103,8 +104,24 @@ const actions = {
     await Api(mutation)
   },
   async setCurrentUser () {
-    let result = await Api('query{myUser{userName userType}}')
+    let result = await Api('query{myUser{userName userType id}}')
     state.user = result.myUser
+  },
+  async getUsers () {
+    let result = await Api('#allUsers')
+    state.allUsers = result.allUsers
+  },
+  async approveUser (store, user) {
+    await Api(`mutation{approveUser(id:"${user.id}"){result}}`)
+    await actions.getUsers()
+  },
+  async changeAdminStatus (store, user) {
+    await Api(`mutation{changeAdminStatus(id:"${user.id}"){result}}`)
+    await actions.getUsers()
+  },
+  async rejectUser (store, user) {
+    await Api(`mutation{rejectUser(id:"${user.id}"){result}}`)
+    await actions.getUsers()
   }
 }
 

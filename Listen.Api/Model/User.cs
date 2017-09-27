@@ -24,6 +24,7 @@ namespace Listen.Api.Model
     {
         Normal = 0,
         Admin = 1,
-        Pending = 2
+        Pending = 2,
+        Rejected = 3
     }
 }

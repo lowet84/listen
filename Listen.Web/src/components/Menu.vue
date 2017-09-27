@@ -24,6 +24,11 @@
           <span>Books</span>
         </md-list-item>
 
+        <md-list-item v-if="admin" @click="goto('users')">
+          <md-icon>supervisor_account</md-icon>
+          <span>Users</span>
+        </md-list-item>
+
         <md-list-item v-if="admin" @click="goto('settings')">
           <md-icon>settings</md-icon>
           <span>Settings</span>
