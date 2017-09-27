@@ -36,6 +36,13 @@ export default {
         return false
       }
       return true
+    },
+    loggedIn: function () {
+      let user = this.$store.state.user
+      if (user === null || (user.userType !== 1 && user.userType !== 0)) {
+        return false
+      }
+      return true
     }
   },
   methods: {

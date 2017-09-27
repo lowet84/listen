@@ -102,9 +102,9 @@ const actions = {
     let mutation = `mutation{applyForLogin(userName:"${userName}"){result{id}}}`
     await Api(mutation)
   },
-  async setCurrentUser (state) {
+  async setCurrentUser () {
     let result = await Api('query{myUser{userName userType}}')
-    state.state.user = result.myUser
+    state.user = result.myUser
   }
 }
 

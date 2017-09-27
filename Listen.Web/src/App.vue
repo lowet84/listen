@@ -25,6 +25,8 @@ export default {
       let authenticated = await this.isAuthenticated()
       if (!authenticated) {
         this.$router.push('/apply')
+      } else {
+        this.$router.push('/books')
       }
       await this.setCurrentUser()
     },

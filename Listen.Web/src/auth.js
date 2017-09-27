@@ -30,7 +30,7 @@ export async function loginIfNeeded (path) {
   }
 }
 
-export function logout () {
+export async function logout () {
   clearIdToken()
   clearAccessToken()
 }

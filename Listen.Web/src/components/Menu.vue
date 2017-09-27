@@ -19,7 +19,7 @@
       </md-toolbar>
 
       <md-list>
-        <md-list-item @click="goto('')">
+        <md-list-item v-if="loggedIn" @click="goto('books')">
           <md-icon>view_list</md-icon>
           <span>Books</span>
         </md-list-item>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { logout } from '../auth'
+import { logout, login } from '../auth'
 export default {
   data () {
     return {
@@ -50,6 +50,13 @@ export default {
     admin: function () {
       let user = this.$store.state.user
       if (user === null || user.userType !== 1) {
+        return false
+      }
+      return true
+    },
+    loggedIn: function () {
+      let user = this.$store.state.user
+      if (user === null || (user.userType !== 1 && user.userType !== 0)) {
         return false
       }
       return true
@@ -66,10 +73,9 @@ export default {
     back () {
       this.$router.push(this.$store.state.backPage)
     },
-    handleLogout () {
-      logout()
-      this.$router.push('/')
-      location.reload()
+    async handleLogout () {
+      await logout()
+      await login()
     }
   }
 }

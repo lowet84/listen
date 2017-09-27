@@ -39,7 +39,7 @@ export default {
 
   created () {
     this.init()
-    this.setActivePage({ name: 'Editing book', back: '/' })
+    this.setActivePage({ name: 'Editing book', back: '/books' })
   },
 
   computed: {
