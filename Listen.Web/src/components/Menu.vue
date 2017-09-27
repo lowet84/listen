@@ -24,7 +24,7 @@
           <span>Books</span>
         </md-list-item>
 
-        <md-list-item @click="goto('settings')">
+        <md-list-item v-if="admin" @click="goto('settings')">
           <md-icon>settings</md-icon>
           <span>Settings</span>
         </md-list-item>
@@ -44,6 +44,15 @@ import { logout } from '../auth'
 export default {
   data () {
     return {
+    }
+  },
+  computed: {
+    admin: function () {
+      let user = this.$store.state.user
+      if (user === null || user.userType !== 1) {
+        return false
+      }
+      return true
     }
   },
   methods: {

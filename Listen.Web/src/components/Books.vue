@@ -9,10 +9,10 @@
         <div class="md-list-text-container">
           <span>{{book.title}}</span>
           <span>{{book.author}}</span>
-          <span>{{book.path}}</span>
+          <span v-if="admin">{{book.path}}</span>
         </div>
 
-        <md-button class="md-icon-button md-list-action" @click="edit(book.id)">
+        <md-button v-if="admin" class="md-icon-button md-list-action" @click="edit(book.id)">
           <md-icon class="md-primary">edit</md-icon>
         </md-button>
 
@@ -28,6 +28,15 @@ export default {
   created () {
     this.setActivePage({ name: 'Books' })
     this.updateBooks()
+  },
+  computed: {
+    admin: function () {
+      let user = this.$store.state.user
+      if (user === null || user.userType !== 1) {
+        return false
+      }
+      return true
+    }
   },
   methods: {
     ...mapMutations([

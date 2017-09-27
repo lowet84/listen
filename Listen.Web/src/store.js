@@ -104,7 +104,7 @@ const actions = {
   },
   async setCurrentUser (state) {
     let result = await Api('query{myUser{userName userType}}')
-    state.user = result.myUser
+    state.state.user = result.myUser
   }
 }
 
