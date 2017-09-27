@@ -24,7 +24,7 @@ export default {
   },
   name: 'coverSearch',
   created () {
-    this.setActivePage({ name: 'Find cover images', back: true })
+    this.setActivePage({ name: 'Find cover images', back: `/edit/${this.book.id}` })
     if (this.$store.state.editingBook == null) {
       this.$router.push('/')
     }

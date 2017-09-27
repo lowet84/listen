@@ -14,11 +14,6 @@ namespace Listen.Api.Schema
 {
     public partial class Query
     {
-        public DefaultResult<bool> IsFirstLogin(UserContext userContext)
-        {
-            return new DefaultResult<bool>(UserUtil.IsFirstUser(userContext.UserName));
-        }
-
         public DefaultResult<bool> IsAuthenticated(UserContext context)
         {
             var user = UserUtil.GetUser(context.UserName);
@@ -33,10 +28,16 @@ namespace Listen.Api.Schema
             return context.GetAll<User>(UserContext.ReadType.WithDocument);
         }
 
-        public User AllUsers(UserContext context, Id id)
+        public User User(UserContext context, Id id)
         {
             UserUtil.IsAuthorized(context, UserType.Admin);
             return context.Get<User>(id);
+        }
+
+        public User MyUser(UserContext context)
+        {
+            var user = UserUtil.GetUser(context.UserName);
+            return user;
         }
 
         public DefaultResult<string> GetApplyingUsername(UserContext context)

@@ -2,7 +2,7 @@
   <md-card v-if="book!==null">
     <md-card-media>
       <div class="cover-image">
-        <img :src="imageUrl" alt="People">
+        <img :src="book.imageUrl" alt="Cover image">
       </div>
     </md-card-media>
 
@@ -29,7 +29,6 @@
 </template>
 
 <script>
-/* global __api__ */
 import { mapMutations, mapActions } from 'vuex'
 export default {
 
@@ -40,15 +39,12 @@ export default {
 
   created () {
     this.init()
-    this.setActivePage({ name: 'Editing book', back: true })
+    this.setActivePage({ name: 'Editing book', back: '/' })
   },
 
   computed: {
     book: function () {
       return this.$store.state.editingBook
-    },
-    imageUrl: function () {
-      return `${__api__}/images/${this.book.coverImage.id}`
     }
   },
 

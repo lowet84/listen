@@ -1,27 +1,33 @@
+/* global __api__ */
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Api from './api'
+import { getAccessToken } from './auth'
 
 Vue.use(Vuex)
 
 const state = {
   activePage: '-',
-  backPage: false,
+  backPage: undefined,
   books: [],
   settings: null,
-  editingBook: null
+  editingBook: null,
+  user: null
 }
 
 const mutations = {
   setActivePage (state, page) {
     state.activePage = page.name
-    state.backPage = page.back === true
+    state.backPage = page.back
   },
   setEditingBook (state, book) {
     state.editingBook = book
   },
   setEditingBookCover (state, cover) {
     state.editingBook.coverImage = cover
+    let token = getAccessToken()
+    state.editingBook.imageUrl =
+      `${__api__}/images/${cover.id}___${token}`
   },
   saveSettings (state) {
     let path = state.settings.path.replace(/\\/g, '\\\\\\\\')
@@ -48,9 +54,11 @@ const actions = {
   async updateBooks () {
     await Api('#updateFileChanges')
     let books = await Api('#allBooks')
+    let token = getAccessToken()
     Vue.set(state, 'books', books.allBooks)
     for (var index = 0; index < state.books.length; index++) {
       var element = state.books[index]
+      element.imageUrl = `${__api__}/images/${element.coverImage.id}___${token}`
       if (element.state === 0) {
         let mutation =
           'mutation{lookupBook(id:"' +
@@ -75,6 +83,8 @@ const actions = {
     }
     let apiBook = await Api(
       `query{book(id:"${id}"){id title author coverImage{id} path encodedPath}}`)
+    let token = getAccessToken()
+    apiBook.book.imageUrl = `${__api__}/images/${apiBook.book.coverImage.id}___${token}`
     return apiBook.book
   },
   async searchCovers (state, string) {
@@ -90,8 +100,11 @@ const actions = {
   },
   async applyForLogin (state, userName) {
     let mutation = `mutation{applyForLogin(userName:"${userName}"){result{id}}}`
-    console.log(mutation)
     await Api(mutation)
+  },
+  async setCurrentUser (state) {
+    let result = await Api('query{myUser{userName userType}}')
+    state.user = result.myUser
   }
 }
 

@@ -1,9 +1,9 @@
 <template>
   <div>
     <md-list class="md-triple-line">
-      <md-list-item v-for="book in $store.state.books" :key="book.id" @click="log('play')">
+      <md-list-item v-for="book in $store.state.books" :key="book.id" @click="play">
         <md-avatar class="md-large">
-          <img :src="imageUrl(book.coverImage.id)" alt="Book">
+          <img :src="book.imageUrl" alt="Book">
         </md-avatar>
 
         <div class="md-list-text-container">
@@ -23,7 +23,6 @@
 </template>
 
 <script>
-/* global __api__ */
 import { mapMutations, mapActions } from 'vuex'
 export default {
   created () {
@@ -34,15 +33,12 @@ export default {
     ...mapMutations([
       'setActivePage']),
     ...mapActions([
-      'updateBooks']),
-    log (text) {
-      console.log(text)
+      'updateBooks', 'getImageUrl']),
+    play () {
+      console.log('play')
     },
     edit (id) {
       this.$router.push(`/edit/${id}`)
-    },
-    imageUrl (id) {
-      return `${__api__}/images/${id}`
     }
   }
 }

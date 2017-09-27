@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using GraphQlRethinkDbLibrary;
 using GraphQlRethinkDbLibrary.Handlers;
@@ -12,18 +13,28 @@ namespace Listen.Api.Handlers
 {
     public class ImageHandler : DefaultImageHandler
     {
-        public override Task Process(HttpContext context)
-        {
-            var userKey = TokenUtil.GetUserKey(context);
-            var user = UserUtil.GetUser(userKey);
-            if(user == null)
-                throw new Exception("Unauthorized");
-            return base.Process(context);
-        }
-
         public override IDefaultImage GetImage(string key)
         {
-            var id = new Id(key);
+            var split = key.Split("___");
+
+            User user;
+            if (split.Length == 1 && Environment.GetEnvironmentVariable("DEBUG_USER") == "true")
+            {
+                user = UserUtil.GetUser(UserUtil.DebugUserNameAndKey);
+            }
+            else
+            {
+                var token = split[1];
+                user = UserUtil.GetUser(TokenUtil.GetUserKey(token));
+            }
+
+            var id = new Id(split[0]);
+            
+            var allowdUserTypes = new[] {UserType.Normal, UserType.Admin};
+            if (!allowdUserTypes.Contains((UserType) user.UserType))
+            {
+                throw new Exception("Unauthorized");
+            }
 
             if (id.IsIdentifierForType<CoverImage>())
             {

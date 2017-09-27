@@ -2,10 +2,10 @@
   <div class="phone-viewport">
 
     <md-toolbar>
-      <md-button v-if="!$store.state.backPage" class="md-icon-button" @click="toggleLeftSidenav">
+      <md-button v-if="$store.state.backPage === undefined" class="md-icon-button" @click="toggleLeftSidenav">
         <md-icon>menu</md-icon>
       </md-button>
-      <md-button v-if="$store.state.backPage" class="md-icon-button" @click="back">
+      <md-button v-if="$store.state.backPage !== undefined" class="md-icon-button" @click="back">
         <md-icon>arrow_back</md-icon>
       </md-button>
       <h2 class="md-title" style="flex: 1">{{$store.state.activePage}}</h2>
@@ -55,7 +55,7 @@ export default {
       this.$refs.leftSidenav.toggle()
     },
     back () {
-      history.back()
+      this.$router.push(this.$store.state.backPage)
     },
     handleLogout () {
       logout()

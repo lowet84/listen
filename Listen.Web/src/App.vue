@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { loginIfNeeded } from './auth'
 export default {
   name: 'app',
@@ -26,8 +26,10 @@ export default {
       if (!authenticated) {
         this.$router.push('/apply')
       }
+      await this.setCurrentUser()
     },
-    ...mapGetters(['isFirstLogin', 'isAuthenticated'])
+    ...mapGetters(['isFirstLogin', 'isAuthenticated']),
+    ...mapActions(['setCurrentUser'])
   }
 }
 </script>

@@ -18,7 +18,12 @@
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DEBUG_USER": true 
+        "DEBUG_USER": false,
+        "AUTH_REDIRECT_URI": "http://localhost:8081",
+        "AUTH_AUDIENCE": "https://listen.fredriklowenhamn.se",
+        "AUTH_SCOPE": "full_access",
+        "AUTH_CLIENT_ID": "bnat0HG5RxUBCQaAP4ZGuN92P0j00BzI",
+        "AUTH_DOMAIN": "lowet.eu.auth0.com"
       },
       "applicationUrl": "http://localhost:58560/"
     }

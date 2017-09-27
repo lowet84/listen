@@ -1,32 +1,24 @@
 import decode from 'jwt-decode'
-// import axios from 'axios'
 import auth0 from 'auth0-js'
-// import Router from 'vue-router'
-// import Auth0Lock from 'auth0-lock'
+import Api from './api'
 const ID_TOKEN_KEY = 'id_token'
 const ACCESS_TOKEN_KEY = 'access_token'
 
-const CLIENT_ID = 'bnat0HG5RxUBCQaAP4ZGuN92P0j00BzI'
-const CLIENT_DOMAIN = 'lowet.eu.auth0.com'
-const REDIRECT = 'http://localhost:8081'
-const SCOPE = 'full_access'
-const AUDIENCE = 'https://listen.fredriklowenhamn.se'
+var auth = null
+var authOptions = null
+var loginOptions = null
 
-var auth = new auth0.WebAuth({
-  clientID: CLIENT_ID,
-  domain: CLIENT_DOMAIN
-})
-
-export function login () {
-  auth.authorize({
-    responseType: 'token id_token',
-    redirectUri: REDIRECT,
-    audience: AUDIENCE,
-    scope: SCOPE
-  })
+export async function login () {
+  if (authOptions === null) {
+    let authResult = await Api('#loginOptions')
+    loginOptions = authResult.loginOptions.loginOptions
+    authOptions = authResult.loginOptions.authOptions
+    auth = new auth0.WebAuth(authOptions)
+  }
+  auth.authorize(loginOptions)
 }
 
-export function loginIfNeeded (path) {
+export async function loginIfNeeded (path) {
   if (path.startsWith('/access_token')) {
     setAccessToken()
     setIdToken()
@@ -34,7 +26,7 @@ export function loginIfNeeded (path) {
     return
   }
   if (!isLoggedIn() || isTokenExpired(getIdToken())) {
-    login()
+    await login()
   }
 }
 

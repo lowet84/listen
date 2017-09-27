@@ -11,7 +11,7 @@ namespace Listen.Api.Schema
         [Description("The app settings")]
         public Settings Settings(UserContext context)
         {
-            UserUtil.IsAuthorized(context, UserType.Normal);
+            UserUtil.IsAuthorized(context, UserType.Admin);
             var settings = context.Search<Settings>("id", "", UserContext.ReadType.WithDocument).FirstOrDefault();
             return settings;
         }

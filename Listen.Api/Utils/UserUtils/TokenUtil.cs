@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using Listen.Api.Model;
 using Microsoft.AspNetCore.Http;
 
 namespace Listen.Api.Utils.UserUtils
@@ -11,20 +12,29 @@ namespace Listen.Api.Utils.UserUtils
     {
         public static string GetUserKey(HttpContext context)
         {
-            var tokenHeader =
-                ((Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.FrameRequestHeaders)context.Request.Headers)
-                .HeaderAuthorization;
-            var token = tokenHeader.ToString().Replace("Bearer", string.Empty).Trim();
-            if (!string.IsNullOrEmpty(token))
+            try
             {
-                var tokenDecoder = new JwtSecurityTokenHandler();
-                var jwtSecurityToken = (JwtSecurityToken)tokenDecoder.ReadToken(token);
-                if (ValidateToken(jwtSecurityToken))
-                    return jwtSecurityToken.Subject;
+                var tokenHeader =
+                        ((Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.FrameRequestHeaders)context.Request.Headers)
+                        .HeaderAuthorization;
+                var token = tokenHeader.ToString().Replace("Bearer", string.Empty).Trim();
+                return GetUserKey(token);
             }
-
-            return null;
+            catch (Exception)
+            {
+                return null;
+            }
         }
+
+        public static string GetUserKey(string token)
+        {
+            if (string.IsNullOrEmpty(token)) return null;
+
+            var tokenDecoder = new JwtSecurityTokenHandler();
+            var jwtSecurityToken = (JwtSecurityToken)tokenDecoder.ReadToken(token);
+            return ValidateToken(jwtSecurityToken) ? jwtSecurityToken.Subject : null;
+        }
+
 
         private static bool ValidateToken(JwtSecurityToken jwtSecurityToken)
         {
@@ -35,8 +45,9 @@ namespace Listen.Api.Utils.UserUtils
                 var validTo = jwtSecurityToken.ValidTo;
                 var validFrom = jwtSecurityToken.ValidFrom;
 
-                var valid = audience == "https://listen.fredriklowenhamn.se";
-                valid &= issuer == "https://lowet.eu.auth0.com/";
+                var login = new Login();
+                var valid = audience == login.LoginOptions.Audience;
+                valid &= issuer == $"https://{login.AuthOptions.Domain}/";
                 valid &= validFrom < DateTime.UtcNow;
                 valid &= validTo > DateTime.UtcNow;
 
