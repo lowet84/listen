@@ -1,4 +1,5 @@
-﻿using GraphQlRethinkDbLibrary.Database;
+﻿using System;
+using GraphQlRethinkDbLibrary.Database;
 using GraphQlRethinkDbLibrary.Handlers;
 using Listen.Api.Handlers;
 using Listen.Api.Schema;
@@ -26,11 +27,12 @@ namespace Listen.Api
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             });
 
+            var databaseUrl = Environment.GetEnvironmentVariable("DATABASE");
             BaseHandler.Setup(
                 app,
                 env,
                 new DatabaseName(Program.DatabaseName),
-                new DatabaseUrl("localhost"),
+                new DatabaseUrl(databaseUrl),
                 new GraphQlHandler<Query, Mutation>(),
                 new ImageHandler());
         }

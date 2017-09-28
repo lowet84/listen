@@ -15,7 +15,6 @@ namespace Listen.Api.Model
     public class LoginOptions
     {
         public string ResponseType => "token id_token";
-        public string RedirectUri => Environment.GetEnvironmentVariable("AUTH_REDIRECT_URI");
         public string Audience => Environment.GetEnvironmentVariable("AUTH_AUDIENCE");
         public string Scope => Environment.GetEnvironmentVariable("AUTH_SCOPE");
     }
