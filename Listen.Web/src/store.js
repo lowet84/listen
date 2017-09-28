@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Api from './api'
-import { getAccessToken } from './auth'
+import { getAccessToken, login } from './auth'
 
 Vue.use(Vuex)
 
@@ -137,6 +137,10 @@ const getters = {
   },
   async getApplyingUser (store) {
     let result = await Api('query{getApplyingUsername{result}}')
+    if (result.getApplyingUsername === null) {
+      console.log('force login')
+      login()
+    }
     return result.getApplyingUsername.result
   }
 }
