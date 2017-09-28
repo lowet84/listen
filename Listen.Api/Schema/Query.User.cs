@@ -40,8 +40,6 @@ namespace Listen.Api.Schema
             var applyingUser = userResult.SingleOrDefault();
             if(applyingUser == null)
                 return new DefaultResult<string>(string.Empty);
-            if(applyingUser.UserType == (int)UserType.Rejected)
-                return new DefaultResult<string>("Rejected");
             if (applyingUser.UserType == (int)UserType.Pending)
                 return new DefaultResult<string>(applyingUser.UserName ?? string.Empty);
             return null;

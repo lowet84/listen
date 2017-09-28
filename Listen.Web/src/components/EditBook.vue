@@ -55,7 +55,6 @@ export default {
         return
       }
       let book = await this.getBook(this.id)
-      console.log(book)
       this.setEditingBook(book)
     },
     ...mapMutations([

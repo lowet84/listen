@@ -19,18 +19,6 @@ export async function login () {
   auth.authorize(loginOptions)
 }
 
-export async function loginIfNeeded (path) {
-  if (path.startsWith('/access_token')) {
-    setAccessToken()
-    setIdToken()
-    window.location.href = '/'
-    return
-  }
-  if (!isLoggedIn() || isTokenExpired(getIdToken())) {
-    await login()
-  }
-}
-
 export async function logout () {
   clearIdToken()
   clearAccessToken()
@@ -64,20 +52,20 @@ function clearAccessToken () {
 }
 
 // Helper function that will allow us to extract the access_token and id_token
-function getParameterByName (name) {
+async function getParameterByName (name) {
   let match = RegExp('[#&/]*' + name + '=([^&]*)').exec(window.location.hash)
   return match && decodeURIComponent(match[1].replace(/\+/g, ' '))
 }
 
 // Get and store access_token in local storage
-export function setAccessToken () {
-  let accessToken = getParameterByName('access_token')
+export async function setAccessToken () {
+  let accessToken = await getParameterByName('access_token')
   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)
 }
 
 // Get and store id_token in local storage
-export function setIdToken () {
-  let idToken = getParameterByName('id_token')
+export async function setIdToken () {
+  let idToken = await getParameterByName('id_token')
   localStorage.setItem(ID_TOKEN_KEY, idToken)
 }
 

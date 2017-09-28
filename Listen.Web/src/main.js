@@ -2,9 +2,10 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import Api from './api'
 import router from './router'
 import store from './store'
-// import { loginIfNeeded } from './auth'
+import { setAccessToken, setIdToken, login } from './auth'
 
 // Components
 import Menu from '@/components/Menu'
@@ -34,11 +35,38 @@ Vue.material.registerTheme({
   }
 })
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: { App }
-})
+let init = async function () {
+  if (window.location.hash.startsWith('#/access_token')) {
+    await setAccessToken()
+    await setIdToken()
+    window.location.href = '/'
+  }
+
+  let loginStatus = await Api('query{getLoginStatus}')
+  console.log(loginStatus)
+  if (loginStatus.getLoginStatus === 'NOT_LOGGED_IN') {
+    login()
+  }
+  if (loginStatus.getLoginStatus === 'OK') {
+    window.location.hash = '/books'
+  } else if (loginStatus.getLoginStatus === 'APPLY') {
+    window.location.hash = '/apply'
+  } else if (loginStatus.getLoginStatus === 'REJECTED') {
+    window.location.hash = '/apply'
+  } else if (loginStatus.getLoginStatus === 'FIRST_LOGIN') {
+    window.location.hash = '/firstLogin'
+  }
+
+  if (loginStatus.getLoginStatus !== 'ERROR') {
+    /* eslint-disable no-new */
+    new Vue({
+      el: '#app',
+      router,
+      store,
+      template: '<App/>',
+      components: { App }
+    })
+  }
+}
+
+init()

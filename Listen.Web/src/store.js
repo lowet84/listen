@@ -127,14 +127,6 @@ const actions = {
 
 // getters are functions
 const getters = {
-  async isFirstLogin (store) {
-    let result = await Api('query{isFirstLogin{result}}')
-    return result.isFirstLogin.result
-  },
-  async isAuthenticated (store) {
-    let result = await Api('query{isAuthenticated{result}}')
-    return result.isAuthenticated.result
-  },
   async getApplyingUser (store) {
     let result = await Api('query{getApplyingUsername{result}}')
     if (result.getApplyingUsername === null) {
