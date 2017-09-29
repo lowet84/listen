@@ -78,6 +78,7 @@ export default {
 <style>
 .cover-image {
   max-height: 400px;
+  max-width: 300px;
   overflow: hidden;
 }
 </style>
