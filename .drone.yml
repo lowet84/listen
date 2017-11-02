@@ -1,0 +1,26 @@
+pipeline:
+  frontend:
+    image: microsoft/aspnetcore-build:2.0.0
+    commands:
+      - cd Listen.Web
+      - npm install
+      - npm run build
+
+  backend:
+    image: microsoft/aspnetcore-build:2.0.0
+    commands: 
+      - cd Listen.Api
+      - mkdir -p wwwroot
+      - cp -r ../Listen.Web/dist/* wwwroot/
+      - mkdir -p out
+      - dotnet restore
+      - dotnet publish --output out/ --configuration Release
+      - mv out ..
+
+  docker:
+    image: plugins/docker
+    repo: lowet84/listen
+    secrets: [ docker_username, docker_password ]
+    tags: latest
+    when:
+      branch: master
