@@ -7,17 +7,12 @@
         </div>
       </md-card-media>
     </md-card-media-cover>
-    <md-card-area>
+    <!-- <md-card-area>
       <md-card-header>
         <div class="md-title">{{book.title}}</div>
         <div class="md-subhead">{{book.author}}</div>
       </md-card-header>
-
-      <!-- <md-card-actions>
-        <md-button>Action</md-button>
-        <md-button>Action</md-button>
-      </md-card-actions> -->
-    </md-card-area>
+    </md-card-area> -->
     <md-progress md-progress="50" class="progress md-accent"></md-progress>
 
   </md-card>
@@ -34,7 +29,7 @@ export default {
 
   created () {
     this.init()
-    this.setActivePage({ name: 'Playing', back: '/books' })
+    this.setActivePage({ name: this.book.title, back: '/books' })
   },
 
   computed: {
@@ -72,12 +67,14 @@ export default {
 
 <style scoped>
 .cover-image {
-  /* max-height: 400px; */
+  max-height: 400px;
+  max-width: 300px;
   overflow: hidden;
 }
 
 .progress {
   height: 30px;
+  max-width: 300px;
 }
 
 .main {
